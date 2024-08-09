@@ -116,6 +116,8 @@ async def upload_video(client, file_path, thumbnail_path, video_title, reply_msg
 
     await reply_msg.delete()
 
+    print(f'file has been deleted {file}'}
+    os.remove(file)
     os.remove(file_path)
     os.remove(thumbnail_path)
     return collection_message.id
