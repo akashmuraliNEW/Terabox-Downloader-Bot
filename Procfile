@@ -1,1 +1,1 @@
-web: Dockerfile
+web: docker
