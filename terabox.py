@@ -98,7 +98,7 @@ async def handle_message(client, message: Message):
     valid_domains = [
     'terabox.com', 'nephobox.com', '4funbox.com', 'mirrobox.com', 
     'momerybox.com', 'teraboxapp.com', '1024tera.com', 
-    'terabox.app', 'gibibox.com', 'goaibox.com', 'terasharelink.com', 'teraboxlink.com'
+    'terabox.app','terafileshare', 'gibibox.com', 'goaibox.com', 'terasharelink.com', 'teraboxlink.com'
     ]
 
     terabox_link = message.text.strip()
@@ -107,14 +107,14 @@ async def handle_message(client, message: Message):
         await message.reply_text("ᴘʟᴇᴀsᴇ sᴇɴᴅ ᴀ ᴠᴀʟɪᴅ ᴛᴇʀᴀʙᴏx ʟɪɴᴋ.")
         return
 
-    reply_msg = await message.reply_text("sᴇɴᴅɪɴɢ ʏᴏᴜ ᴛʜᴇ ᴍᴇᴅɪᴀ...🤤")
+    reply_msg = await message.reply_text("sᴇɴᴅɪɴɢ ʏᴏᴜ ᴛʜᴇ ᴍᴇᴅɪᴀ...")
 
     try:
         file_path, thumbnail_path, video_title = await download_video(terabox_link, reply_msg, user_mention, user_id)
         await upload_video(client, file_path, thumbnail_path, video_title, reply_msg, dump_id, user_mention, user_id, message)
     except Exception as e:
         logging.error(f"Error handling message: {e}")
-        await reply_msg.edit_text("Api has given a Broken Download Link.try again after some hours")
+        await reply_msg.edit_text("Broken Download Link.try again after some hours")
 
 if __name__ == "__main__":
     keep_alive()
