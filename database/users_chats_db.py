@@ -2,7 +2,7 @@ import motor.motor_asyncio
 from os import environ
 
 DATABASE_URL = environ.get('DATABASE_URL', "")
-DATABASE_NAME = environ.get('DATABASE_NAME', "Cluster0")
+DATABASE_NAME = environ.get('DATABASE_NAME', "terabox")
 
 class Database:
     
