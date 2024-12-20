@@ -11,6 +11,7 @@ import time
 from status import format_progress_bar
 from video import download_video, upload_video
 from web import keep_alive
+from database.users_chats_db import db
 
 load_dotenv('config.env', override=True)
 
@@ -49,7 +50,7 @@ app = Client("my_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
 @app.on_message(filters.command("start"))
 async def start_command(client, message):
     # sticker_message = await message.reply_sticker("CAACAgIAAxkBAAEYonplzwrczhVu3I6HqPBzro3L2JU6YAACvAUAAj-VzAoTSKpoG9FPRjQE")
-    await asyncio.sleep(2)
+    # await asyncio.sleep(2)
     # await sticker_message.delete()
     user_mention = message.from_user.mention
     reply_message = f"ᴡᴇʟᴄᴏᴍᴇ, {user_mention}.\n\n🌟 ɪ ᴀᴍ ᴀ ᴛᴇʀᴀʙᴏx ᴅᴏᴡɴʟᴏᴀᴅᴇʀ ʙᴏᴛ. sᴇɴᴅ ᴍᴇ ᴀɴʏ ᴛᴇʀᴀʙᴏx ʟɪɴᴋ ɪ ᴡɪʟʟ ᴅᴏᴡɴʟᴏᴀᴅ ᴡɪᴛʜɪɴ ғᴇᴡ sᴇᴄᴏɴᴅs ᴀɴᴅ sᴇɴᴅ ɪᴛ ᴛᴏ ʏᴏᴜ ✨."
@@ -66,6 +67,22 @@ async def start_command(client, message):
         )
     else:
         await message.reply_text(reply_message, reply_markup=reply_markup)
+    if not await db.is_user_exist(message.from_user.id):
+        await db.add_user(message.from_user.id, message.from_user.first_name)
+        await client.send_message(-1002368748188, 
+                              f"""#ɴᴇᴡ_ᴜꜱᴇʀ
+    
+                              ◉ ᴜꜱᴇʀ-ɪᴅ: <code>{message.from_user.id}</code>
+                              ◉ ᴀᴄᴄ-ɴᴀᴍᴇ: {message.from_user.mention}
+                              ◉ ᴜꜱᴇʀɴᴀᴍᴇ: @{message.from_user.username}
+                              ◉ ʙʏ: @teraboxdI_bot</b>""")
+    
+@Client.on_message(filters.command('stats') & filters.incoming)
+async def get_ststs(bot, message):
+    rju = await message.reply('<b>𝙰𝙲𝙲𝙴𝚂𝚂𝙸𝙽𝙶 𝚂𝚃𝙰𝚃𝚄𝚂 𝙳𝙴𝚃𝙰𝙸𝙻𝚂...</b>')
+    total_users = await db.total_users_count()
+    
+    await rju.edit(f'Total Active Users :{total_users}')
 
 async def is_user_member(client, user_id):
     try:
@@ -78,6 +95,7 @@ async def is_user_member(client, user_id):
     except Exception as e:
         logging.error(f"Error checking membership status for user {user_id}: {e}")
         return False
+    
 
 @app.on_message(filters.text)
 async def handle_message(client, message: Message):
@@ -108,6 +126,7 @@ async def handle_message(client, message: Message):
         return
 
     reply_msg = await message.reply_text("sᴇɴᴅɪɴɢ ʏᴏᴜ ᴛʜᴇ ᴍᴇᴅɪᴀ...")
+
 
     try:
         file_path, thumbnail_path, video_title = await download_video(terabox_link, reply_msg, user_mention, user_id)
