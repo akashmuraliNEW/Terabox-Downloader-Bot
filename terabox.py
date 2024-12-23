@@ -77,7 +77,7 @@ async def start_command(client, message):
                               ◉ ᴜꜱᴇʀɴᴀᴍᴇ: @{message.from_user.username}
                               ◉ ʙʏ: @teraboxdI_bot</b>""")
     
-@Client.on_message(filters.command('stats') & filters.incoming)
+@app.on_message(filters.command('stats'))
 async def get_ststs(bot, message):
     rju = await message.reply('<b>𝙰𝙲𝙲𝙴𝚂𝚂𝙸𝙽𝙶 𝚂𝚃𝙰𝚃𝚄𝚂 𝙳𝙴𝚃𝙰𝙸𝙻𝚂...</b>')
     total_users = await db.total_users_count()
@@ -120,7 +120,8 @@ async def handle_message(client, message: Message):
     ]
 
     terabox_link = message.text.strip()
-
+    if message.startswith('/'):
+        return
     if not any(domain in terabox_link for domain in valid_domains):
         await message.reply_text("ᴘʟᴇᴀsᴇ sᴇɴᴅ ᴀ ᴠᴀʟɪᴅ ᴛᴇʀᴀʙᴏx ʟɪɴᴋ.")
         return
