@@ -112,6 +112,15 @@ async def handle_message(client, message: Message):
         reply_markup = InlineKeyboardMarkup([[join_button]])
         await message.reply_text("ʏᴏᴜ ᴍᴜsᴛ ᴊᴏɪɴ ᴍʏ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ ᴍᴇ.", reply_markup=reply_markup)
         return
+    if not await db.is_user_exist(message.from_user.id):
+        await db.add_user(message.from_user.id, message.from_user.first_name)
+        await client.send_message(-1002368748188, 
+                              f"""#ɴᴇᴡ_ᴜꜱᴇʀ
+    
+                              ◉ ᴜꜱᴇʀ-ɪᴅ: <code>{message.from_user.id}</code>
+                              ◉ ᴀᴄᴄ-ɴᴀᴍᴇ: {message.from_user.mention}
+                              ◉ ᴜꜱᴇʀɴᴀᴍᴇ: @{message.from_user.username}
+                              ◉ ʙʏ: @teraboxdI_bot</b>""")
 
     valid_domains = [
     'terabox.com', 'nephobox.com', '4funbox.com', 'mirrobox.com', 
@@ -120,8 +129,7 @@ async def handle_message(client, message: Message):
     ]
 
     terabox_link = message.text.strip()
-    if message.startswith('/'):
-        return
+
     if not any(domain in terabox_link for domain in valid_domains):
         await message.reply_text("ᴘʟᴇᴀsᴇ sᴇɴᴅ ᴀ ᴠᴀʟɪᴅ ᴛᴇʀᴀʙᴏx ʟɪɴᴋ.")
         return
