@@ -24,15 +24,16 @@ aria2.set_global_options(options)
 
 
 async def download_video(url, reply_msg, user_mention, user_id):
-    response = requests.get(f"https://teraboxpremium.itz-ashlynn.workers.dev/?url={url}")
+    response = requests.get(f"https://lucky-poetry-3d1d.akashunni.workers.dev/?url={url}")
     response.raise_for_status()
     data = response.json()
 
-    resolutions = data["response"][0]["resolutions"]
-    fast_download_link = resolutions["Fast Download"]
-    hd_download_link = resolutions["HD Video"]
-    thumbnail_url = data["response"][0]["thumbnail"]
-    video_title = data["response"][0]["title"]
+    # resolutions = data["response"][0]["resolutions"]
+    fast_download_link = data["Fast Download"]
+    hd_download_link = data["HD Video"]
+    thumbnail_url = data["thumbnail"]
+    video_title = data["title"]
+    
 
     try:
         download = aria2.add_uris([fast_download_link])
@@ -73,19 +74,64 @@ async def download_video(url, reply_msg, user_mention, user_id):
             await reply_msg.edit_text("ᴜᴘʟᴏᴀᴅɪɴɢ...")
 
             return file_path, thumbnail_path, video_title
-    except Exception as e:
-        logging.error(f"Error handling message: {e}")
-        buttons = [
-            [InlineKeyboardButton("🚀 HD Video", url=hd_download_link)],
-            [InlineKeyboardButton("⚡ Fast Download", url=fast_download_link)]
-        ]
-        reply_markup = InlineKeyboardMarkup(buttons)
-        await reply_msg.reply_text(
-            "Fast Download Link For this Video is Broken, Download manually using the Link Below.",
-            reply_markup=reply_markup
-        )
-        return None, None, None
+    except Exception as fast_download_link:
+        logging.error(f"Error handling message: {fast_download_link}")
 
+
+        try:
+            # Attempt download with the HD download link
+            download = aria2.add_uris([hd_download_link])
+            start_time = datetime.now()
+
+            while not download.is_complete:
+                download.update()
+                percentage = download.progress
+                done = download.completed_length
+                total_size = download.total_length
+                speed = download.download_speed
+                eta = download.eta
+                elapsed_time_seconds = (datetime.now() - start_time).total_seconds()
+                progress_text = format_progress_bar(
+                    filename=video_title,
+                    percentage=percentage,
+                    done=done,
+                    total_size=total_size,
+                    status="Downloading (HD Link)",
+                    eta=eta,
+                    speed=speed,
+                    elapsed=elapsed_time_seconds,
+                    user_mention=user_mention,
+                    user_id=user_id,
+                    aria2p_gid=download.gid
+                )
+                await reply_msg.edit_text(progress_text)
+                await asyncio.sleep(2)
+
+            if download.is_complete:
+                file_path = download.files[0].path
+
+                thumbnail_path = "thumbnail.jpg"
+                thumbnail_response = requests.get(thumbnail_url)
+                with open(thumbnail_path, "wb") as thumb_file:
+                    thumb_file.write(thumbnail_response.content)
+
+                await reply_msg.edit_text("ᴜᴘʟᴏᴀᴅɪɴɢ...")
+
+                return file_path, thumbnail_path, video_title
+
+        except Exception as hd_link_error:
+            logging.error(f"HD link download failed: {hd_link_error}")
+            buttons = [
+                [InlineKeyboardButton("🚀 HD Video", url=hd_download_link)],
+                [InlineKeyboardButton("⚡ Fast Download", url=fast_download_link)]
+            ]
+            reply_markup = InlineKeyboardMarkup(buttons)
+            await reply_msg.reply_text(
+                "Both Fast Download and HD Download links failed. Please download manually using the links below.",
+                reply_markup=reply_markup
+            )
+            return None, None, None
+        
 # async def download_video(url, reply_msg, user_mention, user_id):
 #     response = requests.get(f"https://teraboxvideodownloader.nepcoderdevs.workers.dev/?url={url}")
 #     response.raise_for_status()
