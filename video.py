@@ -185,7 +185,7 @@ async def download_video(url, reply_msg, user_mention, user_id):
 #         return markup
 
 
-async def upload_video(client, file_path, thumbnail_path, video_title, reply_msg, collection_channel_id, user_mention, user_id, message):
+async def upload_video(client, file_path, video_title, reply_msg, collection_channel_id, user_mention, user_id, message):
     file_size = os.path.getsize(file_path)
     uploaded = 0
     start_time = datetime.now()
@@ -236,7 +236,7 @@ async def upload_video(client, file_path, thumbnail_path, video_title, reply_msg
     await reply_msg.delete()
     # sticker_message = await message.reply_sticker("CAACAgIAAxkBAAEZdwRmJhCNfFRnXwR_lVKU1L9F3qzbtAAC4gUAAj-VzApzZV-v3phk4DQE")
     os.remove(file_path)
-    os.remove(thumbnail_path)
+    # os.remove(thumbnail_path)
     # await asyncio.sleep(5)
     # await sticker_message.delete()
     return collection_message.id
