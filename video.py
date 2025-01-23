@@ -24,15 +24,15 @@ aria2.set_global_options(options)
 
 
 async def download_video(url, reply_msg, user_mention, user_id):
-    response = requests.get(f"https://lucky-poetry-3d1d.akashunni.workers.dev/?url={url}")
+    response = requests.get(f"https://pika-terabox-dl.vercel.app/?url={url}")
     response.raise_for_status()
     data = response.json()
 
     # resolutions = data["response"][0]["resolutions"]
-    fast_download_link = data["Fast Download"]
-    hd_download_link = data["HD Video"]
+    fast_download_link = data["downloadLink"]
+    hd_download_link = data["downloadLink"]
     thumbnail_url = data["thumbnail"]
-    video_title = data["title"]
+    video_title = data["filename"]
     
 
     try:
