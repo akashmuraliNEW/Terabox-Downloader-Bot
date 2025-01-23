@@ -31,7 +31,7 @@ async def download_video(url, reply_msg, user_mention, user_id):
     # resolutions = data["response"][0]["resolutions"]
     fast_download_link = data["downloadLink"]
     hd_download_link = data["downloadLink"]
-    thumbnail_url = data["thumbnail"]
+    # thumbnail_url = data["thumbnail"]
     video_title = data["filename"]
     
 
@@ -66,14 +66,14 @@ async def download_video(url, reply_msg, user_mention, user_id):
         if download.is_complete:
             file_path = download.files[0].path
 
-            thumbnail_path = "thumbnail.jpg"
-            thumbnail_response = requests.get(thumbnail_url)
-            with open(thumbnail_path, "wb") as thumb_file:
-                thumb_file.write(thumbnail_response.content)
+            # thumbnail_path = "thumbnail.jpg"
+            # thumbnail_response = requests.get(thumbnail_url)
+            # with open(thumbnail_path, "wb") as thumb_file:
+            #     thumb_file.write(thumbnail_response.content)
 
             await reply_msg.edit_text("ᴜᴘʟᴏᴀᴅɪɴɢ...")
 
-            return file_path, thumbnail_path, video_title
+            return file_path, video_title
     except Exception as fast_download_link:
         logging.error(f"Error handling message: {fast_download_link}")
 
@@ -110,14 +110,14 @@ async def download_video(url, reply_msg, user_mention, user_id):
             if download.is_complete:
                 file_path = download.files[0].path
 
-                thumbnail_path = "thumbnail.jpg"
-                thumbnail_response = requests.get(thumbnail_url)
-                with open(thumbnail_path, "wb") as thumb_file:
-                    thumb_file.write(thumbnail_response.content)
+                # thumbnail_path = "thumbnail.jpg"
+                # thumbnail_response = requests.get(thumbnail_url)
+                # with open(thumbnail_path, "wb") as thumb_file:
+                #     thumb_file.write(thumbnail_response.content)
 
                 await reply_msg.edit_text("ᴜᴘʟᴏᴀᴅɪɴɢ...")
 
-                return file_path, thumbnail_path, video_title
+                return file_path, video_title
 
         except Exception as hd_link_error:
             logging.error(f"HD link download failed: {hd_link_error}")
@@ -222,7 +222,7 @@ async def upload_video(client, file_path, thumbnail_path, video_title, reply_msg
             chat_id=collection_channel_id,
             video=file,
             caption=f"✨ {video_title}\n👤 downloaded using : @teraboxdI_bot",
-            thumb=thumbnail_path,
+            # thumb=thumbnail_path,
             progress=progress
         )
         await client.copy_message(
