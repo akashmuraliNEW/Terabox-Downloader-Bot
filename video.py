@@ -24,15 +24,16 @@ aria2.set_global_options(options)
 
 
 async def download_video(url, reply_msg, user_mention, user_id):
-    response = requests.get(f"https://pika-terabox-dl.vercel.app/?url={url}")
+    response = requests.get(f"https://terabvercel.vercel.app/api?url={url}")
     response.raise_for_status()
     data = response.json()
 
     # resolutions = data["response"][0]["resolutions"]
-    fast_download_link = data["downloadLink"]
-    hd_download_link = data["downloadLink"]
+    extracted_info  = data["Extracted Info"][0]
+    fast_download_link =extracted_info ["Direct Download Link"]
+    hd_download_link = extracted_info ["Direct Download Link"]
     # thumbnail_url = data["thumbnail"]
-    video_title = data["filename"]
+    video_title = extracted_info ["Title"]
     
 
     try:
