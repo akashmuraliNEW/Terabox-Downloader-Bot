@@ -17,7 +17,7 @@ aria2 = aria2p.API(
 options = {
     "max-tries": "50",
     "retry-wait": "3",
-    "continue": "true"
+    "continue": "true",
     "allow-overwrite": "true",
     "min-split-size": "4M",
     "split": "10"
