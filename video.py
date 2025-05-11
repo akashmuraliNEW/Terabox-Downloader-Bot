@@ -18,6 +18,9 @@ options = {
     "max-tries": "50",
     "retry-wait": "3",
     "continue": "true"
+    "allow-overwrite": "true",
+    "min-split-size": "4M",
+    "split": "10"
 }
 
 aria2.set_global_options(options)
