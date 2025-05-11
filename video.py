@@ -78,7 +78,7 @@ async def download_video(url, reply_msg, user_mention, user_id):
 
             return file_path, video_title
     except Exception as fast_download_link:
-        logging.error(f"Error handling message: {fast_download_link}")
+        logging.error(f"Error handling message fast download link: {fast_download_link}")
 
 
         try:
