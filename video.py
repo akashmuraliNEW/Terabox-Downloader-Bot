@@ -32,7 +32,7 @@ async def download_video(url, reply_msg, user_mention, user_id):
     # resolutions = data["response"][0]["resolutions"]
     extracted_info  = data["📜 Extracted Info"][0]
     fast_download_link = extracted_info ["🔽 Direct Download Link"]
-    hd_download_link = extracted_info ["Direct Download Link"]
+    hd_download_link = extracted_info ["🔽 Direct Download Link"]
     print(fast_download_link)
     thumbnail_url = data["🖼️ Thumbnails"]
     video_title = extracted_info ["📂 Title"]
