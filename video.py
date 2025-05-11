@@ -79,6 +79,15 @@ async def download_video(url, reply_msg, user_mention, user_id):
             return file_path, video_title
     except Exception as fast_download_link:
         logging.error(f"Error handling message fast download link: {fast_download_link}")
+        buttons = [
+                [InlineKeyboardButton("🚀 HD Video", url=hd_download_link)],
+                [InlineKeyboardButton("⚡ Fast Download", url=fast_download_link)]
+            ]
+            reply_markup = InlineKeyboardMarkup(buttons)
+            await reply_msg.reply_text(
+                "Download links failed. Please download manually using the links below.",
+                reply_markup=reply_markup
+            )
 
 
         try:
