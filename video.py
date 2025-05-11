@@ -88,6 +88,7 @@ async def download_video(url, reply_msg, user_mention, user_id):
                 "Download links failed. Please download manually using the links below.",
                 reply_markup=reply_markup
             )
+        return None, None, None
 
 
         try:
