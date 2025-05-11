@@ -24,17 +24,18 @@ aria2.set_global_options(options)
 
 
 async def download_video(url, reply_msg, user_mention, user_id):
-    response = requests.get(f"https://terabvercel.vercel.app/api?url={url}")
+    # response = requests.get(f"https://terabvercel.vercel.app/api?url={url}")
+    response = requests.get(f"https://wdzone-terabox-api.vercel.app/api?url={url}")
     response.raise_for_status()
     data = response.json()
 
     # resolutions = data["response"][0]["resolutions"]
-    extracted_info  = data["Extracted Info"][0]
-    fast_download_link =extracted_info ["Direct Download Link"]
+    extracted_info  = data["📜 Extracted Info"][0]
+    fast_download_link = extracted_info ["🔽 Direct Download Link"]
     hd_download_link = extracted_info ["Direct Download Link"]
     print(fast_download_link)
-    # thumbnail_url = data["thumbnail"]
-    video_title = extracted_info ["Title"]
+    thumbnail_url = data["🖼️ Thumbnails"]
+    video_title = extracted_info ["📂 Title"]
     
 
     try:
@@ -68,10 +69,10 @@ async def download_video(url, reply_msg, user_mention, user_id):
         if download.is_complete:
             file_path = download.files[0].path
 
-            # thumbnail_path = "thumbnail.jpg"
-            # thumbnail_response = requests.get(thumbnail_url)
-            # with open(thumbnail_path, "wb") as thumb_file:
-            #     thumb_file.write(thumbnail_response.content)
+            thumbnail_path = "thumbnail.jpg"
+            thumbnail_response = requests.get(thumbnail_url)
+            with open(thumbnail_path, "wb") as thumb_file:
+                thumb_file.write(thumbnail_response.content)
 
             await reply_msg.edit_text("ᴜᴘʟᴏᴀᴅɪɴɢ...")
 
@@ -187,7 +188,7 @@ async def download_video(url, reply_msg, user_mention, user_id):
 #         return markup
 
 
-async def upload_video(client, file_path, video_title, reply_msg, collection_channel_id, user_mention, user_id, message):
+async def upload_video(client, file_path,thumbnail_path, video_title, reply_msg, collection_channel_id, user_mention, user_id, message):
     file_size = os.path.getsize(file_path)
     uploaded = 0
     start_time = datetime.now()
@@ -224,7 +225,7 @@ async def upload_video(client, file_path, video_title, reply_msg, collection_cha
             chat_id=collection_channel_id,
             video=file,
             caption=f"✨ {video_title}\n👤 downloaded using : @teraboxdI_bot",
-            # thumb=thumbnail_path,
+            thumb=thumbnail_path,
             progress=progress
         )
         await client.copy_message(
@@ -238,7 +239,7 @@ async def upload_video(client, file_path, video_title, reply_msg, collection_cha
     await reply_msg.delete()
     # sticker_message = await message.reply_sticker("CAACAgIAAxkBAAEZdwRmJhCNfFRnXwR_lVKU1L9F3qzbtAAC4gUAAj-VzApzZV-v3phk4DQE")
     os.remove(file_path)
-    # os.remove(thumbnail_path)
+    os.remove(thumbnail_path)
     # await asyncio.sleep(5)
     # await sticker_message.delete()
     return collection_message.id
