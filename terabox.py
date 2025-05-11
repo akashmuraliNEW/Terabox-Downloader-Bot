@@ -138,8 +138,8 @@ async def handle_message(client, message: Message):
 
 
     try:
-        file_path, video_title = await download_video(terabox_link, reply_msg, user_mention, user_id)
-        await upload_video(client, file_path, video_title, reply_msg, dump_id, user_mention, user_id, message)
+        file_path, thumbnail_path, video_title = await download_video(terabox_link, reply_msg, user_mention, user_id)
+        await upload_video(client, file_path, thumbnail_path, video_title, reply_msg, dump_id, user_mention, user_id, message)
     except Exception as e:
         logging.error(f"Error handling message: {e}")
         await reply_msg.edit_text("Broken Download Link.try again after some hours")
